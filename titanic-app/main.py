@@ -1,6 +1,6 @@
-#import Flask 
 from flask import Flask, render_template, request
-#create an instance of Flask
+import numpy as np
+import joblib, sklearn
 app = Flask(__name__)
 @app.route('/')
 def home():
@@ -18,15 +18,26 @@ def predict():
         SibSp = request.form.get('sibsp')
         Parch = request.form.get('parch')
         Fare = request.form.get('fare')
-        Age2 = Age**2
+        Age2 = int(Age)**2
         try:
-            prediction = preprocessDataAndPredict(tv, radio, newspaper)
+            prediction = preprocessDataAndPredict(
+                Sex_male, 
+                Embarked_C, 
+                Embarked_Q, 
+                Embarked_S, 
+                misAge_1, 
+                Pclass, 
+                Age, 
+                SibSp, 
+                Parch, 
+                Fare, 
+                Age2)
             return render_template('predict.html', prediction = prediction)
         except ValueError:
             return "Please Enter valid values"
         pass        
     pass
-def preprocessDataAndPredict(tv, radio, newspaper):
+def preprocessDataAndPredict(Sex_male, Embarked_C, Embarked_Q, Embarked_S, misAge_1, Pclass, Age, SibSp, Parch, Fare, Age2):
     test_data = [Sex_male, Embarked_C, Embarked_Q, Embarked_S, misAge_1, Pclass, Age, SibSp, Parch, Fare, Age2]
     print(test_data)
     test_data = np.array(test_data).astype(np.float) 
